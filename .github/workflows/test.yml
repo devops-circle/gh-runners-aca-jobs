@@ -10,3 +10,5 @@ jobs:
       - uses: actions/checkout@v2
       - name: Display Azure-CLI Version
         run: az --version
+
+      - run: sleep 5m
