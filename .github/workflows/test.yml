@@ -11,4 +11,4 @@ jobs:
       - name: Display Azure-CLI Version
         run: az --version
 
-      - run: sleep 5m
+      - run: sleep 2m
