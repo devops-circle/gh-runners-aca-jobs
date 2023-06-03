@@ -88,7 +88,7 @@ resource "azapi_resource" "acaj_runners_jobs" {
         containers = [
           {
             image   = var.job_image
-            name    = "ghrunnersacajobstest"
+            name    = "ghrunnersacajobs"
             command = null
             args    = null
             env     = var.env_variables
