@@ -30,7 +30,6 @@ resource "azapi_resource" "acaj_runners_jobs" {
   name      = var.job_name
   location  = azurerm_resource_group.rg_runners_aca_jobs.location
   parent_id = azurerm_resource_group.rg_runners_aca_jobs.id
-
   tags = {}
 
   identity {
@@ -72,7 +71,7 @@ resource "azapi_resource" "acaj_runners_jobs" {
                 metadata = {
                   owner       = var.gh_owner
                   repos       = var.gh_repository
-                  runnerScope = "repo"
+                  runnerScope = var.gh_scope
                 }
                 auth = [
                   {
@@ -92,7 +91,7 @@ resource "azapi_resource" "acaj_runners_jobs" {
             name    = "ghrunnersacajobstest"
             command = null
             args    = null
-            env = var.env_variables
+            env     = var.env_variables
             resources = {
               cpu    = var.job_cpu
               memory = var.job_memory

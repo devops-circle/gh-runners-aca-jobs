@@ -54,15 +54,20 @@ variable "job_replica_retry_limit" {
 }
 
 variable "gh_owner" {
-  description = "Name the Github owner"
+  description = "The owner of the GitHub repository, or the organization that owns the repository"
   type        = string
 }
 
 variable "gh_repository" {
-  description = "Name of the Github repository"
+  description = "The list of repositories to scale, separated by comma"
   type        = string
 }
 
+variable "gh_scope" {
+    description = "The scope of the runner, can be either “org”, “ent” or “repo”"
+    type = string
+    default = "repo"
+}
 
 variable "gh_pat_secret_name" {
   description = "Name of the secret storing the GitHub PAT token"
