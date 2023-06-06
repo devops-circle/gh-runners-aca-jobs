@@ -1,4 +1,4 @@
-resource_group_name                       = "rg-ghrunnersacajobs-new"
+resource_group_name                       = "rg-ghrunnersacajobs"
 location                                  = "West Europe"
 log_analytics_workspace_name              = "la-ghrunnersacajobs"
 log_analytics_workspace_sku               = "PerGB2018"
