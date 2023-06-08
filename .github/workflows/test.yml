@@ -11,4 +11,8 @@ jobs:
       - name: Display Azure-CLI Version
         run: az --version
 
-      - run: sleep 2m
+      - name: Show IP
+        run: wget -q -O- http://ipecho.net/plain
+
+      - name: Sleep
+        run: sleep 2m
