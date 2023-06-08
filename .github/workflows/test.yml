@@ -16,5 +16,8 @@ jobs:
       - name: Show Public IP
         run: wget -q -O- http://ipecho.net/plain
 
+      - name: Show Private IP
+        run: hostname -I | awk '{print $1}'
+
       - name: Sleep
         run: sleep 2m
