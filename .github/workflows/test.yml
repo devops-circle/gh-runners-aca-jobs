@@ -5,7 +5,7 @@ on:
 
 jobs:
   testRunner:
-    runs-on: [self-hosted, label1, label2]
+    runs-on: [self-hosted]
     steps:
 
       - uses: actions/checkout@v3
