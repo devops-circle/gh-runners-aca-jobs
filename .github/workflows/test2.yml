@@ -1,11 +1,11 @@
-name: Self-Hosted-workflow Test1
+name: Self-Hosted-workflow Test2
 
 on:
   workflow_dispatch:
 
 jobs:
   testRunner:
-    runs-on: [self-hosted, label1]
+    runs-on: [self-hosted, label3]
     steps:
 
       - uses: actions/checkout@v3
@@ -16,5 +16,5 @@ jobs:
       - name: Show Public IP
         run: wget -q -O- http://ipecho.net/plain
 
-      - name: Sleep
-        run: sleep 2m
+      - name: Show Private IP
+        run: hostname -I | awk '{print $1}'
