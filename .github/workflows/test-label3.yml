@@ -1,11 +1,11 @@
-name: Self-Hosted-workflow Test
+name: Self-Hosted-workflow Test Label 4
 
 on:
   workflow_dispatch:
 
 jobs:
   testRunner:
-    runs-on: [self-hosted]
+    runs-on: [self-hosted, label3]
     steps:
 
       - uses: actions/checkout@v3
@@ -18,6 +18,3 @@ jobs:
 
       - name: Show Private IP
         run: hostname -I | awk '{print $1}'
-
-      - name: Sleep
-        run: sleep 2m
