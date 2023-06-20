@@ -30,7 +30,7 @@ resource "azapi_resource" "acaj_runners_jobs" {
   name      = var.job_name
   location  = azurerm_resource_group.rg_runners_aca_jobs.location
   parent_id = azurerm_resource_group.rg_runners_aca_jobs.id
-  tags = {}
+  tags      = {}
 
   identity {
     type         = "UserAssigned"
@@ -63,7 +63,7 @@ resource "azapi_resource" "acaj_runners_jobs" {
           scale = {
             minExecutions   = var.job_scale_min_executions
             maxExecutions   = var.job_scale_max_executions
-            pollingInterval = null
+            pollingInterval = var.job_scale_polling_interval
             rules = [
               {
                 name = "github-runner"

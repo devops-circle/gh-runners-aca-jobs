@@ -18,6 +18,7 @@ job_cpu                                   = 2.0
 job_memory                                = "4Gi"
 job_scale_min_executions                  = 0
 job_scale_max_executions                  = 10
+job_scale_polling_interval                = 30
 parallelism                               = 10
 
 env_variables = [

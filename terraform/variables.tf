@@ -64,9 +64,9 @@ variable "gh_repository" {
 }
 
 variable "gh_scope" {
-    description = "The scope of the runner, can be either “org”, “ent” or “repo”"
-    type = string
-    default = "repo"
+  description = "The scope of the runner, can be either “org”, “ent” or “repo”"
+  type        = string
+  default     = "repo"
 }
 
 variable "gh_pat_secret_name" {
@@ -101,13 +101,19 @@ variable "env_variables" {
 }
 
 variable "job_scale_min_executions" {
-  description = "Job scale minimal execution"
+  description = "The minimum number of job executions to run per polling interval."
   type        = number
 }
 
 variable "job_scale_max_executions" {
-  description = "Job scale maximal execution"
+  description = "The maximum number of job executions to run per polling interval"
   type        = number
+}
+
+variable "job_scale_polling_interval" {
+  description = "The polling interval at which to evaluate the scale rule"
+  type        = number
+  default     = 30
 }
 
 variable "parallelism" {
