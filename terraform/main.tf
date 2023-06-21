@@ -3,6 +3,28 @@ resource "azurerm_resource_group" "rg_runners_aca_jobs" {
   location = var.location
 }
 
+resource "azurerm_virtual_network" "vnet_runners_aca_jobs" {
+  name                = "vnet-ghrunnersacajobs-tf"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.rg_runners_aca_jobs.name
+  address_space       = ["10.0.0.0/23"]
+}
+
+resource "azurerm_subnet" "subnet_runners_aca_jobs" {
+  name                 = "snet-ghrunnersacajobs-tf"
+  resource_group_name  = azurerm_resource_group.rg_runners_aca_jobs.name
+  address_prefixes     = ["10.0.1.0/27"]
+  virtual_network_name = azurerm_virtual_network.vnet_runners_aca_jobs.name
+  delegation {
+    name = "containerapps"
+    service_delegation {
+      name    = "Microsoft.App/environments"
+      actions = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
+    }
+  }
+}
+
+
 resource "azurerm_log_analytics_workspace" "la_runners_aca_jobs" {
   name                = var.log_analytics_workspace_name
   location            = azurerm_resource_group.rg_runners_aca_jobs.location
@@ -18,11 +40,47 @@ resource "azurerm_user_assigned_identity" "uai_runners_aca_jobs" {
   tags                = {}
 }
 
-resource "azurerm_container_app_environment" "acae_runners_jobs" {
-  name                       = var.aca_environment_name
-  location                   = azurerm_resource_group.rg_runners_aca_jobs.location
-  resource_group_name        = azurerm_resource_group.rg_runners_aca_jobs.name
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.la_runners_aca_jobs.id
+# resource "azurerm_container_app_environment" "acae_runners_jobs" {
+#   name                       = var.aca_environment_name
+#   location                   = azurerm_resource_group.rg_runners_aca_jobs.location
+#   resource_group_name        = azurerm_resource_group.rg_runners_aca_jobs.name
+#   log_analytics_workspace_id = azurerm_log_analytics_workspace.la_runners_aca_jobs.id
+# }
+
+resource "azapi_resource" "acae_runners_jobs" {
+  type      = "Microsoft.App/managedEnvironments@2023-04-01-preview"
+  name      = var.aca_environment_name
+  parent_id = azurerm_resource_group.rg_runners_aca_jobs.id
+  location  = azurerm_resource_group.rg_runners_aca_jobs.location
+
+  schema_validation_enabled = false
+
+  body = jsonencode({
+    properties = {
+      appLogsConfiguration = {
+        destination = "log-analytics"
+        logAnalyticsConfiguration = {
+          customerId = azurerm_log_analytics_workspace.la_runners_aca_jobs.workspace_id
+          sharedKey  = azurerm_log_analytics_workspace.la_runners_aca_jobs.primary_shared_key
+        }
+      }
+      vnetConfiguration = {
+        dockerBridgeCidr       = null
+        infrastructureSubnetId = azurerm_subnet.subnet_runners_aca_jobs.id
+        internal               = true
+        platformReservedCidr   = null
+        platformReservedDnsIP  = null
+      }
+      workloadProfiles = [
+        {
+          name                = "workload-ded"
+          workloadProfileType = "D4"
+          minimumCount        = 1
+          maximumCount        = 3
+        }
+      ]
+    }
+  })
 }
 
 resource "azapi_resource" "acaj_runners_jobs" {
@@ -42,7 +100,8 @@ resource "azapi_resource" "acaj_runners_jobs" {
 
   body = jsonencode({
     properties = {
-      environmentId = azurerm_container_app_environment.acae_runners_jobs.id
+      environmentId = azapi_resource.acae_runners_jobs.id
+      workloadProfileName = "workload-ded"
       configuration = {
         secrets = [
           {
