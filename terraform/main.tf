@@ -100,7 +100,7 @@ resource "azapi_resource" "acaj_runners_jobs" {
 
   body = jsonencode({
     properties = {
-      environmentId = azapi_resource.acae_runners_jobs.id
+      environmentId       = azapi_resource.acae_runners_jobs.id
       workloadProfileName = "workload-ded"
       configuration = {
         secrets = [
