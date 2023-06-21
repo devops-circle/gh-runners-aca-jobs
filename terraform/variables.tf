@@ -33,6 +33,17 @@ variable "aca_environment_name" {
   type        = string
 }
 
+variable "aca_workload_profiles" {
+  description = "Workload profiles configured for the Managed Environment"
+  type = list(object({
+    name                = string
+    workloadProfileType = string
+    minimumCount        = number
+    maximumCount        = number
+  }))
+}
+
+
 variable "job_name" {
   description = "Name of the job"
   type        = string
@@ -116,7 +127,12 @@ variable "job_scale_polling_interval" {
   default     = 30
 }
 
-variable "parallelism" {
+variable "job_parallelism" {
   description = "Number of parallel replicas of a job that can run at a given time."
   type        = number
+}
+
+variable "job_workload_profile_name" {
+  description = "Workload profile name to pin for container apps job execution"
+  type = string
 }

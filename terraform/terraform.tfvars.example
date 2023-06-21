@@ -5,6 +5,14 @@ log_analytics_workspace_sku               = "PerGB2018"
 log_analytics_workspace_retention_in_days = 30
 identity_name                             = "umi-ghrunnersacajobs"
 aca_environment_name                      = "acaeghrunnersacajobs"
+aca_workload_profiles = [
+  {
+    name                = "workload-gh-runners"
+    workloadProfileType = "D4"
+    minimumCount        = 1
+    maximumCount        = 3
+  }
+]
 job_name                                  = "acajrunnersjobs"
 job_image                                 = "aztfmod/rover-agent:1.2.9-2305.1807-github"
 job_replica_timeout                       = 604800
@@ -19,7 +27,7 @@ job_memory                                = "4Gi"
 job_scale_min_executions                  = 0
 job_scale_max_executions                  = 10
 job_scale_polling_interval                = 30
-parallelism                               = 10
+job_parallelism                           = 10
 
 env_variables = [
   {
@@ -47,3 +55,5 @@ env_variables = [
     value = "label1,label2,label3"
   }
 ]
+
+job_workload_profile_name = "workload-gh-runners"

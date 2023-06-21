@@ -71,14 +71,7 @@ resource "azapi_resource" "acae_runners_jobs" {
         platformReservedCidr   = null
         platformReservedDnsIP  = null
       }
-      workloadProfiles = [
-        {
-          name                = "workload-ded"
-          workloadProfileType = "D4"
-          minimumCount        = 1
-          maximumCount        = 3
-        }
-      ]
+      workloadProfiles = var.aca_workload_profiles
     }
   })
 }
@@ -101,7 +94,7 @@ resource "azapi_resource" "acaj_runners_jobs" {
   body = jsonencode({
     properties = {
       environmentId       = azapi_resource.acae_runners_jobs.id
-      workloadProfileName = "workload-ded"
+      workloadProfileName = var.job_workload_profile_name
       configuration = {
         secrets = [
           {
@@ -118,7 +111,7 @@ resource "azapi_resource" "acaj_runners_jobs" {
         dapr                  = null
         eventTriggerConfig = {
           replicaCompletionCount = null
-          parallelism            = var.parallelism
+          parallelism            = var.job_parallelism
           scale = {
             minExecutions   = var.job_scale_min_executions
             maxExecutions   = var.job_scale_max_executions
