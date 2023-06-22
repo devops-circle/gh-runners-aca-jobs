@@ -7,7 +7,7 @@ identity_name                             = "umi-ghrunnersacajobs"
 aca_environment_name                      = "acaeghrunnersacajobs"
 aca_workload_profiles = [
   {
-    name                = "workload-gh-runners"
+    name                = "wl-gh-runners"
     workloadProfileType = "D4"
     minimumCount        = 1
     maximumCount        = 3
@@ -56,4 +56,4 @@ env_variables = [
   }
 ]
 
-job_workload_profile_name = "workload-gh-runners"
+job_workload_profile_name = "wl-gh-runners"
