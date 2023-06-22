@@ -1,0 +1,89 @@
+#!/bin/bash
+
+GH_TOKEN="PUT_YOUR_GITHUB_TOKEN_HIER"
+RG_NAME="rg-ghrunnersacajobs-ded"
+MI_NAME="mi-ghrunnersacajobs-ded"
+ACA_ENV_NAME="acae-ghrunnersacaenv-ded"
+ACA_JOB_NAME="acaej-ghrunnersacajob-ded"
+ACA_WORKLOAD_PROFILE_NAME="workload-ded"
+VNET_NAME="vnet-ghrunnersacajob-ded"
+SUBNET_NAME="snet-ghrunnersacajob-ded"
+LA_NAME="la-ghrunnersacajob-ded"
+LOCATION="northeurope"
+LABELS="label1,label2"
+PARALLELISM=1
+
+# Create resource group
+az group create -n $RG_NAME --location $LOCATION
+
+# Create Log Analytics Workspace
+az monitor log-analytics workspace create --name $LA_NAME --resource-group $RG_NAME
+
+# Create Managed Identity
+az identity create -n $MI_NAME --resource-group $RG_NAME --location $LOCATION
+
+MI_ID=$(az identity show -n $MI_NAME -g $RG_NAME --query id --output tsv)
+
+# Create VNET
+az network vnet create \
+  --address-prefixes 13.0.0.0/23 \
+  --resource-group $RG_NAME \
+  --location $LOCATION \
+  --name $VNET_NAME
+
+# Create subnet
+SUBNET_ID=$(az network vnet subnet create \
+  --address-prefixes 13.0.0.0/27 \
+  --delegations Microsoft.App/environments \
+  --name $SUBNET_NAME \
+  --resource-group $RG_NAME \
+  --vnet-name $VNET_NAME \
+  --query "id" \
+  --output tsv)
+
+LA_ID=$(az monitor log-analytics workspace show --name $LA_NAME --resource-group $RG_NAME --query customerId -o tsv)
+
+LA_KEY=$(az monitor log-analytics workspace get-shared-keys --name $LA_NAME --resource-group $RG_NAME --query primarySharedKey -o tsv)
+
+# Create Container App Environment
+az containerapp env create \
+  --enable-workload-profiles \
+  --resource-group $RG_NAME \
+  --name $ACA_ENV_NAME \
+  --location $LOCATION \
+  --infrastructure-subnet-resource-id $SUBNET_ID \
+  --internal-only true \
+  --logs-workspace-id $LA_ID \
+  --logs-workspace-key $LA_KEY
+
+# Create Container App Environment Workload Profile
+az containerapp env workload-profile add \
+  -g $RG_NAME \
+  -n $ACA_ENV_NAME \
+  --workload-profile-name $ACA_WORKLOAD_PROFILE_NAME \
+  --workload-profile-type D4 \
+  --min-nodes 1 \
+  --max-nodes 3
+
+# Create Container App Job
+az containerapp job create \
+    --name $ACA_JOB_NAME \
+    --resource-group $RG_NAME \
+    --environment $ACA_ENV_NAME \
+    --trigger-type "Event" \
+    --replica-timeout 604800 \
+    --replica-retry-limit 1 \
+    --image "aztfmod/rover-agent:1.2.9-2306.0205-github" \
+    --cpu "2" \
+    --memory "4Gi" \
+    --min-executions 0 \
+    --parallelism $PARALLELISM \
+    --max-executions 10 \
+    --scale-rule-name "github-runner" \
+    --scale-rule-type "github-runner" \
+    --scale-rule-metadata "owner=devops-circle" "runnerScope=repo" "repos=gh-runners-aca-jobs" "labelsFromEnv=LABELS" \
+    --scale-rule-auth "personalAccessToken=pat-token-secret" \
+    --secrets "pat-token-secret=${GH_TOKEN}" \
+    --env-vars "EPHEMERAL=true" "URL=https://github.com" "GH_TOKEN=secretref:pat-token-secret" "GH_OWNER=devops-circle" "GH_REPOSITORY=gh-runners-aca-jobs" "LABELS=${LABELS}" \
+    --mi-user-assigned $MI_ID \
+    --workload-profile-name $ACA_WORKLOAD_PROFILE_NAME
