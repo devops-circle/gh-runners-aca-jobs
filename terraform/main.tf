@@ -40,7 +40,7 @@ resource "azurerm_user_assigned_identity" "uai_runners_aca_jobs" {
   tags                = {}
 }
 
-## The AzureRM provider doesn't supprt yet the workload profiles
+## The AzureRM provider doesn't support yet the workload profiles
 # resource "azurerm_container_app_environment" "acae_runners_jobs" {
 #   name                       = var.aca_environment_name
 #   location                   = azurerm_resource_group.rg_runners_aca_jobs.location
