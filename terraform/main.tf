@@ -85,7 +85,7 @@ resource "azapi_resource" "acaj_runners_jobs" {
   tags      = {}
 
   identity {
-    type         = "Userrljhr;gjshugl;shg;srigseh;Assigned"
+    type         = "UserAssigned"
     identity_ids = [azurerm_user_assigned_identity.uai_runners_aca_jobs.id]
   }
 
