@@ -40,14 +40,6 @@ resource "azurerm_user_assigned_identity" "uai_runners_aca_jobs" {
   tags                = {}
 }
 
-## The AzureRM provider doesn't support yet the workload profiles
-# resource "azurerm_container_app_environment" "acae_runners_jobs" {
-#   name                       = var.aca_environment_name
-#   location                   = azurerm_resource_group.rg_runners_aca_jobs.location
-#   resource_group_name        = azurerm_resource_group.rg_runners_aca_jobs.name
-#   log_analytics_workspace_id = azurerm_log_analytics_workspace.la_runners_aca_jobs.id
-# }
-
 resource "azapi_resource" "acae_runners_jobs" {
   type      = "Microsoft.App/managedEnvironments@2023-04-01-preview"
   name      = var.aca_environment_name
