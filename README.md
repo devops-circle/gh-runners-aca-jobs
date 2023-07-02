@@ -8,4 +8,5 @@ To start using the code:
 - rename terraform.tfvars.example to terraform.tfvars
 - create a GitHub PAT token as described in the blog
 - paste the GitHub PAT token in the gh_pat_value variable in the terrafom.tfvars
+- go the terraform folder
 - run terraform plan/apply
