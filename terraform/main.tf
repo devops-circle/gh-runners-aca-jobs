@@ -24,7 +24,6 @@ resource "azurerm_subnet" "subnet_runners_aca_jobs" {
   }
 }
 
-
 resource "azurerm_log_analytics_workspace" "la_runners_aca_jobs" {
   name                = var.log_analytics_workspace_name
   location            = azurerm_resource_group.rg_runners_aca_jobs.location
@@ -47,6 +46,8 @@ resource "azapi_resource" "acae_runners_jobs" {
   location  = azurerm_resource_group.rg_runners_aca_jobs.location
 
   schema_validation_enabled = false
+  ignore_missing_property = true
+  ignore_casing = true
 
   body = jsonencode({
     properties = {
@@ -83,6 +84,8 @@ resource "azapi_resource" "acaj_runners_jobs" {
 
   # Need to set to false because at the moment only 2022-11-01-preview is supported
   schema_validation_enabled = false
+  ignore_missing_property = true
+  ignore_casing = true
 
   body = jsonencode({
     properties = {
