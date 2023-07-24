@@ -1,3 +1,12 @@
+
+// Change at least the following lines
+
+gh_pat_value                              = "ghp_THIS_IS_A_GH_TOKEN"
+gh_owner                                  = "GITHUB_OWNER_NAME"
+gh_repository                             = "GITHUB_REPOSITORY_NAME"
+
+//
+
 resource_group_name                       = "rg-ghrunnersacajobs"
 location                                  = "North Europe"
 log_analytics_workspace_name              = "la-ghrunnersacajobs"
@@ -17,11 +26,9 @@ job_name                                  = "acajrunnersjobs"
 job_image                                 = "aztfmod/rover-agent:1.2.9-2305.1807-github"
 job_replica_timeout                       = 604800
 job_replica_retry_limit                   = 1
-gh_owner                                  = "devops-circle"
-gh_repository                             = "gh-runners-aca-jobs"
 gh_scope                                  = "repo"
 gh_pat_secret_name                        = "pat-token-secret"
-gh_pat_value                              = "ghp_THIS_IS_A_GH_TOKEN"
+
 job_cpu                                   = 2.0
 job_memory                                = "4Gi"
 job_scale_min_executions                  = 0

@@ -1,11 +1,11 @@
-name: Self-Hosted-workflow Test Label 4
+name: Self-Hosted-workflow Test Label 2
 
 on:
   workflow_dispatch:
 
 jobs:
   testRunner:
-    runs-on: [self-hosted, label4]
+    runs-on: [self-hosted, label2]
     steps:
 
       - uses: actions/checkout@v3
