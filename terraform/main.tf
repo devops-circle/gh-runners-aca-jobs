@@ -40,7 +40,7 @@ resource "azurerm_user_assigned_identity" "uai_runners_aca_jobs" {
 }
 
 resource "azapi_resource" "acae_runners_jobs" {
-  type      = "Microsoft.App/managedEnvironments@2023-04-01-preview"
+  type      = "Microsoft.App/managedEnvironments@2023-05-02-preview"
   name      = var.aca_environment_name
   parent_id = azurerm_resource_group.rg_runners_aca_jobs.id
   location  = azurerm_resource_group.rg_runners_aca_jobs.location
@@ -71,7 +71,7 @@ resource "azapi_resource" "acae_runners_jobs" {
 }
 
 resource "azapi_resource" "acaj_runners_jobs" {
-  type      = "Microsoft.App/jobs@2023-04-01-preview"
+  type      = "Microsoft.App/jobs@2023-05-02-preview"
   name      = var.job_name
   location  = azurerm_resource_group.rg_runners_aca_jobs.location
   parent_id = azurerm_resource_group.rg_runners_aca_jobs.id

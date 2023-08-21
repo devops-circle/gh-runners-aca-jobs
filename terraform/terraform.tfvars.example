@@ -23,8 +23,8 @@ aca_workload_profiles = [
   }
 ]
 job_name                                  = "acajrunnersjobs"
-job_image                                 = "aztfmod/rover-agent:1.2.9-2305.1807-github"
-job_replica_timeout                       = 604800
+job_image                                 = "aztfmod/rover-agent:1.3.9-2307.2804-github"
+job_replica_timeout                       = 86400
 job_replica_retry_limit                   = 1
 gh_scope                                  = "repo"
 gh_pat_secret_name                        = "pat-token-secret"
